@@ -1,0 +1,206 @@
+*{ margin: 0%;
+    padding: 0%;
+    box-sizing: border-box;
+}
+
+.navbar{
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color:#C3A995;
+    height: 85px;
+    font-size: 14px;
+    box-shadow: white 0px 0px 15px;
+      font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+
+}
+
+.navbar-1{
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.navbar-1 a{
+    text-decoration: none;
+    color: #000;
+    margin: 20px;
+    font-size: 16px;
+}
+
+.navbar-1 a:hover{
+    text-decoration-line: underline;
+    text-decoration-color: #000;
+    text-underline-offset: 8px;
+    text-decoration-thickness: 2.5px;
+    transition: 3s ease-out;
+}
+
+.navbar-1 button{
+    width: 100px;
+    height: 35px;
+    align-items: center;
+    background-color: black;
+    color: white;
+    border-radius: 2px;
+    border: none;
+    box-shadow: white 0px 0px 10px;
+    
+}
+
+.logo{
+    width:10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo image{
+    width: 100px;
+    height: 10px;
+}
+
+.navbar-2{
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar-2 a{
+    text-decoration: none;
+    color: #000;
+    margin: 20px;
+    font-size: 16px;
+}
+
+.navbar-2 a:hover{
+    text-decoration-line: underline;
+    text-decoration-color: #000;
+    text-underline-offset: 8px;
+    text-decoration-thickness: 2.5px;
+    transition: 3s ease-out;
+}
+
+header{
+    background-image: url('Assets/images/ChatGPT\ Image\ Oct\ 2\,\ 2025\,\ 09_22_20\ PM.png');
+    height: 900px;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    
+}
+
+.backgroud{
+    width: 40%;
+    height: 400px;
+    margin-right: 700px;
+    margin-top: 180px;
+    
+}
+
+.backgroud h1{
+    font-size: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.backgroud p{
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    margin: 2px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    line-height: 19px;
+
+   
+    
+}
+
+.backgroud button{
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    margin: 10px;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border-radius: 2px;
+    border: none;
+    width: 170px;
+    height: 50px;
+    box-shadow: white 0px 0px 10px;
+}
+
+.hero{
+    display: flex;
+    width: 100%;
+    overflow-x: auto;
+    gap: 15rem;
+    height: 80px;
+}
+
+.hero::-webkit-scrollbar {
+    display: none;
+}
+.animation{
+    display: flex;
+    margin-left: 30px;
+    animation: animate 25s infinite linear;
+    justify-content: center;
+    align-items: center;
+    gap: 15rem;
+    height: 75px;
+}
+
+.animation img{
+    height: 60px;
+}
+
+.marque{
+    height: 60px;
+}
+
+@keyframes animate{
+    from {translate: 0;}
+    to{ translate: -100%;}
+}
+
+.product{
+    height: 800px;
+    width: 100%;
+    background-color: #C3A995;
+    display: flex;
+}
+
+.firsth1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    font-size: 40px;
+    margin: 20px;
+    color: black;
+    display: block;
+}
+
+.box{
+    height: 300px;
+    width: 300px;
+    background-color: #000;
+    margin: 20px;
+    display: flex;
+
+}
