@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Happy Birthday — Surprise</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Dancing+Script:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --purple:#2b0340;
+    --pink:#ff70a6;
+    --gold:#ffd36b;
+    --glass: rgba(255,255,255,0.04);
+    --text:#fffdfd;
+    --max-width:980px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0;background:linear-gradient(140deg,var(--purple), #0b0310 60%);font-family:Poppins,system-ui,Arial;color:var(--text);-webkit-font-smoothing:antialiased}
+  body{display:flex;align-items:center;justify-content:center;padding:14px}
+
+  /* Stage container */
+  .stage{
+    width:100%; max-width:var(--max-width);
+    border-radius:18px; padding:14px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    box-shadow:0 30px 80px rgba(0,0,0,0.6); border:1px solid var(--glass);
+    position:relative; overflow:hidden;
+  }
+
+  /* animated soft background blob */
+  .bg-blob{position:absolute;inset:-20%;z-index:0;filter:blur(80px);opacity:0.95;
+    background:
+      radial-gradient(420px 300px at 10% 20%, rgba(139,47,230,0.16), transparent 20%),
+      radial-gradient(380px 280px at 80% 80%, rgba(255,111,163,0.10), transparent 22%),
+      radial-gradient(300px 200px at 60% 30%, rgba(255,211,107,0.06), transparent 30%);
+    transform-origin:center; animation: drift 18s ease-in-out infinite;
+  }
+  @keyframes drift{0%{transform:translateY(0) rotate(0)}50%{transform:translateY(-22px) rotate(6deg)}100%{transform:translateY(0) rotate(0)}}
+
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;position:relative;z-index:3}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo{width:46px;height:46px;border-radius:12px;background:linear-gradient(90deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;font-weight:800;color:white;box-shadow:0 10px 30px rgba(139,47,230,0.12)}
+  .siteTitle{font-weight:700}
+  .siteSub{font-size:12px;opacity:.92}
+
+  /* main layout mobile-first */
+  .main{display:block;margin-top:12px;position:relative;z-index:3}
+  .hero{display:flex;flex-direction:column;gap:12px}
+  .heroTitle{font-family:'Dancing Script',cursive;font-size:40px;margin:0;color:var(--text);line-height:1;text-shadow:0 12px 34px rgba(139,47,230,0.12)}
+  .heroSub{margin:0;font-size:15px;opacity:.95}
+  .message{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);font-size:15px;line-height:1.5}
+
+  .controls{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .btn{padding:10px 14px;border-radius:12px;border:0;cursor:pointer;font-weight:800;font-size:14px;box-shadow:0 10px 26px rgba(0,0,0,0.32)}
+  .primary{background:linear-gradient(90deg,var(--pink),var(--purple));color:white}
+  .ghost{background:transparent;color:var(--text);border:1px solid rgba(255,255,255,0.06)}
+  .gold{background:linear-gradient(90deg,var(--gold),#ffe19a);color:#2b0d00}
+
+  /* slideshow: full-width single-image fade */
+  .slideshow{
+    margin-top:14px; width:100%; height:min(56vh,420px); max-height:520px; border-radius:12px; overflow:hidden; position:relative;
+    display:flex; align-items:center; justify-content:center; background:#0b0310;
+  }
+  .slide{position:absolute;inset:0;opacity:0;transform:scale(.98);transition:opacity .9s ease, transform .9s ease}
+  .slide.show{opacity:1;transform:scale(1)}
+  .slide img{width:100%;height:100%;object-fit:cover;display:block}
+
+  .slideControls{display:flex;gap:8px;justify-content:center;margin-top:10px}
+
+  /* right info row for larger screens */
+  .infoRow{display:flex;align-items:center;gap:12px;margin-top:12px}
+  .avatar{width:84px;height:84px;border-radius:50%;overflow:hidden;border:4px solid rgba(255,255,255,0.04);background:linear-gradient(180deg,var(--pink),var(--purple));box-shadow:0 12px 30px rgba(0,0,0,0.45)}
+  .avatar img{width:100%;height:100%;object-fit:cover}
+
+  .timer{display:flex;gap:8px;align-items:center}
+  .timeBox{background:rgba(0,0,0,0.16);padding:6px 8px;border-radius:8px;min-width:56px;text-align:center}
+  .timeBox .num{font-weight:800;font-size:14px}
+
+  /* overlay & effects */
+  .overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:9999;pointer-events:none;opacity:0;transition:opacity .25s}
+  .overlay.show{opacity:1;pointer-events:auto}
+  .reveal{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);text-align:center;max-width:92%}
+  canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:998}
+
+  .hearts{position:absolute;inset:0;pointer-events:none;z-index:2}
+  .heart{position:absolute;transform:translate(-50%,-50%);will-change:transform,opacity;font-size:18px;color:rgba(255,220,240,0.92);filter:drop-shadow(0 8px 20px rgba(139,47,230,0.08))}
+
+  /* responsive - larger screens */
+  @media (min-width:900px){
+    .main{display:flex;gap:18px}
+    .leftCol{flex:1}
+    .rightCol{width:320px;min-width:240px}
+    .heroTitle{font-size:56px}
+    .slideshow{height:min(60vh,520px)}
+    .avatar{width:140px;height:140px}
+    .timeBox .num{font-size:18px}
+  }
+  @media (max-width:420px){
+    .heroTitle{font-size:30px}
+    .slideshow{height:48vh}
+    .btn{padding:10px 12px;font-size:13px}
+  }
+
+  .hidden{display:none}
+</style>
+</head>
+<body>
+  <div class="bg-blob" aria-hidden="true"></div>
+
+  <div class="stage" role="main" aria-label="Birthday surprise">
+    <div class="hearts" id="hearts"></div>
+
+    <div class="top" role="region" aria-label="Header">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">❤</div>
+        <div>
+          <div class="siteTitle" id="siteTitle">A Special Surprise</div>
+          <div class="siteSub" id="siteSub">Tap <strong>Start Surprise</strong> to begin</div>
+        </div>
+      </div>
+      <div>
+        <button id="startBtn" class="btn primary" aria-label="Start surprise">Start Surprise ▶</button>
+      </div>
+    </div>
+
+    <div class="main" role="main">
+      <div class="leftCol">
+        <div class="hero">
+          <h1 class="heroTitle" id="heroTitle">Happy Birthday, Love!</h1>
+          <div class="heroSub" id="heroSub">Wishing you a day full of love & joy.</div>
+          <div class="message" id="messageBox">You are the reason my world feels beautiful. (Edit in CONFIG)</div>
+        </div>
+
+        <div class="controls" id="preControls">
+          <button id="revealBtn" class="btn gold hidden">Reveal Surprise ✨</button>
+          <button id="musicBtn" class="btn ghost hidden">Play Music</button>
+        </div>
+
+        <div class="slideshow" id="slideshow" aria-live="polite">
+          <!-- slides go here -->
+        </div>
+        <div class="slideControls" id="slideControls">
+          <button id="prev" class="btn ghost hidden">◀ Prev</button>
+          <button id="pause" class="btn ghost hidden">Pause</button>
+          <button id="next" class="btn ghost hidden">Next ▶</button>
+        </div>
+      </div>
+
+      <div class="rightCol" aria-label="Right column">
+        <div class="infoRow" style="margin-top:6px">
+          <div class="avatar" id="avatar"><img alt="avatar" src=""></div>
+          <div style="margin-left:8px">
+            <div style="font-weight:700" id="sideTitle">For Someone Special</div>
+            <div style="font-size:13px;opacity:.9" id="sideNote">Open on the reveal day</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px" aria-hidden="false">
+          <div class="timer" role="timer" aria-live="polite">
+            <div class="timeBox"><div class="num" id="days">00</div><div style="font-size:12px">Days</div></div>
+            <div class="timeBox"><div class="num" id="hours">00</div><div style="font-size:12px">Hours</div></div>
+            <div class="timeBox"><div class="num" id="minutes">00</div><div style="font-size:12px">Mins</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="reveal" role="document">
+      <h2 id="revealTitle">Happy Birthday! 🎉</h2>
+      <p id="revealText">You are the reason my world feels beautiful. Wishing you endless joy.</p>
+      <div style="margin-top:12px"><button id="closeReveal" class="btn primary">Close</button></div>
+    </div>
+  </div>
+
+  <!-- audio element (replace in CONFIG or drop-in your URL) -->
+  <audio id="bgAudio" preload="auto" loop>
+    <source src="" type="audio/mpeg">
+  </audio>
+
+<script>
+/* ============================= CONFIG =============================
+ - Replace CONFIG.memories (20 image URLs) with your own image links (https).
+ - Paste your MP3 URL into CONFIG.music to set the song.
+ - Change CONFIG.name or message if you wish.
+==================================================================*/
+const CONFIG = {
+  name: 'Loved One',
+  message: 'You make my world brighter every day.',
+  avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop',
+  // 20 placeholders — replace with your 20 images (direct image URLs)
+  memories: [
+    'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1506084868230-bb9d95c24759?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1524503033411-c9566986fc8f?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1505852679233-d9fd70aff56d?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1544006659-f0b21884ce1d?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1492562080023-6708f1e6c2c8?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1489777402153-1c4a00b6f7b0?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1507003211169-3b3a0b99f9b9?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1497005367839-6e852de72767?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1463453091185-61582044d556?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1524504388940-1f2b9b9f2b1b?q=80&w=1600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1517841905240-1d7a5a1b2c3d?q=80&w=1600&auto=format&fit=crop'
+  ],
+  music: 'https://open.spotify.com/album/69xcXWqK1aN73KgVA2i3Zq?si=FxgwLOwqRhuqm8h4QmhsIA' 
+};
+/* ================================================================== */
+
+/* basic UI wiring */
+document.getElementById('heroTitle').textContent = `Happy Birthday, ${CONFIG.name}!`;
+document.getElementById('messageBox').textContent = CONFIG.message;
+document.getElementById('avatar').querySelector('img').src = CONFIG.avatar;
+document.getElementById('revealTitle').textContent = `Happy Birthday, ${CONFIG.name}!`;
+document.getElementById('revealText').textContent = CONFIG.message;
+
+/* audio */
+const bgAudio = document.getElementById('bgAudio');
+if(CONFIG.music && CONFIG.music.trim() !== ''){
+  bgAudio.querySelector('source').src = CONFIG.music;
+  bgAudio.load();
+}
+
+/* build slides (20) */
+const slideshow = document.getElementById('slideshow');
+CONFIG.memories.forEach((url, i) => {
+  const slide = document.createElement('div');
+  slide.className = 'slide' + (i === 0 ? ' show' : '');
+  slide.setAttribute('role','img');
+  slide.setAttribute('aria-label', `photo ${i+1}`);
+  const img = document.createElement('img');
+  img.src = url;
+  img.alt = `memory ${i+1}`;
+  slide.appendChild(img);
+  slideshow.appendChild(slide);
+});
+const slides = Array.from(document.querySelectorAll('.slide'));
+let cur = 0, slideTimer = null, sliding = false;
+
+/* slideshow functions */
+function showSlide(i){
+  slides.forEach((s, idx)=> s.classList.toggle('show', idx === i));
+  cur = i;
+}
+function nextSlide(){ showSlide((cur + 1) % slides.length); }
+function prevSlide(){ showSlide((cur - 1 + slides.length) % slides.length); }
+function startSlideshow(){ if(slideTimer) clearInterval(slideTimer); slideTimer = setInterval(nextSlide, 3500); sliding = true; document.getElementById('pause').textContent = 'Pause'; }
+function stopSlideshow(){ if(slideTimer) clearInterval(slideTimer); sliding = false; document.getElementById('pause').textContent = 'Play'; }
+
+/* show/hide controls after start */
+const startBtn = document.getElementById('startBtn');
+const revealBtn = document.getElementById('revealBtn');
+const musicBtn = document.getElementById('musicBtn');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const pauseBtn = document.getElementById('pause');
+
+startBtn.addEventListener('click', async () => {
+  startBtn.style.display = 'none';
+  revealBtn.classList.remove('hidden');
+  musicBtn.classList.remove('hidden');
+  prevBtn.classList.remove('hidden');
+  nextBtn.classList.remove('hidden');
+  pauseBtn.classList.remove('hidden');
+  document.getElementById('siteSub').textContent = 'Ready — press Reveal for the surprise';
+  try{ await bgAudio.play(); musicBtn.textContent = 'Pause Music'; }catch(e){ musicBtn.textContent = 'Play Music'; }
+  startSlideshow(); // background slideshow ready (still hidden emphasis until reveal)
+});
+
+/* music toggle */
+musicBtn.addEventListener('click', async () => {
+  if(bgAudio.paused){ try{ await bgAudio.play(); musicBtn.textContent = 'Pause Music'; }catch(e){ musicBtn.textContent = 'Play Music'; } }
+  else { bgAudio.pause(); musicBtn.textContent = 'Play Music'; }
+});
+
+/* controls */
+nextBtn.addEventListener('click', ()=>{ nextSlide(); stopSlideshow(); });
+prevBtn.addEventListener('click', ()=>{ prevSlide(); stopSlideshow(); });
+pauseBtn.addEventListener('click', ()=>{ sliding ? stopSlideshow() : startSlideshow(); });
+
+/* swipe support */
+let touchStartX = 0;
+slideshow.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; }, {passive:true});
+slideshow.addEventListener('touchend', e => {
+  const touchEndX = e.changedTouches[0].screenX;
+  const diff = touchEndX - touchStartX;
+  if(Math.abs(diff) > 40){
+    if(diff < 0) { nextSlide(); stopSlideshow(); } else { prevSlide(); stopSlideshow(); }
+  }
+}, {passive:true});
+
+/* reveal action */
+revealBtn.addEventListener('click', async () => {
+  document.getElementById('overlay').classList.add('show');
+  startConfetti();
+  launchBalloons(14);
+  stopSlideshow();
+  // sequential emphasize: highlight each slide once then resume loop
+  let i = 0;
+  const seq = setInterval(()=>{ showSlide(i); i++; if(i>=slides.length){ clearInterval(seq); startSlideshow(); } }, 650);
+  try{ bgAudio.currentTime = 0; await bgAudio.play().catch(()=>{}); }catch(e){}
+  setTimeout(()=>{ document.getElementById('overlay').classList.remove('show'); }, 14000);
+});
+document.getElementById('closeReveal').addEventListener('click', ()=>{ document.getElementById('overlay').classList.remove('show'); });
+
+/* confetti implementation */
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+let W = canvas.width = innerWidth, H = canvas.height = innerHeight;
+window.addEventListener('resize', ()=>{ W = canvas.width = innerWidth; H = canvas.height = innerHeight; });
+
+let confetti = [], confA = null;
+function makeConfetti(n=220){
+  confetti = [];
+  for(let i=0;i<n;i++){
+    confetti.push({
+      x: Math.random()*W,
+      y: Math.random()*-H,
+      w: 6 + Math.random()*12,
+      h: 6 + Math.random()*14,
+      rot: Math.random()*360,
+      speed: 1 + Math.random()*4,
+      color: ['#ffd6e8','#ffd166','#ff8aa4','#fff2f8','#ffd36b'][Math.floor(Math.random()*5)],
+      tilt: Math.random()*Math.PI*2
+    });
+  }
+}
+function drawConfetti(){
+  ctx.clearRect(0,0,W,H);
+  confetti.forEach(p=>{
+    ctx.save();
+    ctx.translate(p.x,p.y);
+    ctx.rotate(p.tilt);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+    ctx.restore();
+  });
+  updateConfetti();
+}
+function updateConfetti(){
+  confetti.forEach(p=>{
+    p.y += p.speed + Math.sin(p.tilt)*0.6;
+    p.x += Math.cos(p.tilt)*0.6;
+    p.tilt += 0.02;
+    if(p.y > H + 50){ p.y = -20 - Math.random()*H; p.x = Math.random()*W; }
+  });
+}
+function startConfetti(){ makeConfetti(240); if(confA) cancelAnimationFrame(confA); (function loop(){ drawConfetti(); confA = requestAnimationFrame(loop); })(); setTimeout(()=>{ stopConfetti(); }, 16000); }
+function stopConfetti(){ if(confA) cancelAnimationFrame(confA); ctx.clearRect(0,0,W,H); }
+
+/* hearts & balloons */
+const hearts = document.getElementById('hearts');
+function spawnHeart(){
+  const el = document.createElement('div');
+  el.className = 'heart'; el.textContent = '❤';
+  const size = 10 + Math.random()*24; el.style.fontSize = size + 'px';
+  el.style.left = (6 + Math.random()*88) + '%'; el.style.top = (80 + Math.random()*18) + '%';
+  hearts.appendChild(el);
+  const dur = 5000 + Math.random()*7000; const start = performance.now(); const drift = (Math.random()-0.5)*90;
+  function anim(now){ const t = (now-start)/dur; if(t>=1){ el.remove(); return } el.style.transform = `translate(${drift*t}px, ${-140*t}px) rotate(${t*360}deg)`; el.style.opacity = String(1 - t*0.95); requestAnimationFrame(anim); }
+  requestAnimationFrame(anim);
+}
+setInterval(spawnHeart, 700);
+
+function launchBalloons(n=10){
+  for(let i=0;i<n;i++){
+    const b = document.createElement('div'); b.style.position='fixed'; b.style.left=(5+Math.random()*90)+'%'; b.style.bottom='-160px'; b.style.zIndex=9980;
+    const w = 26 + Math.random()*46, h = 36 + Math.random()*66; b.style.width = w+'px'; b.style.height = h+'px';
+    b.style.borderRadius='50% 50% 50% 50%/60% 60% 40% 40%'; const palette = ['#ffd6e8','#ff9cbf','#ff7aa0','#ffd98a'];
+    b.style.background = palette[i % palette.length]; b.style.boxShadow='inset -8px -8px 28px rgba(255,255,255,0.05)'; document.body.appendChild(b);
+    const start = performance.now(); const dur = 7000 + Math.random()*8000;
+    function rise(now){ const t=(now-start)/dur; if(t>1){ b.remove(); return } b.style.bottom = (-160 + t*(window.innerHeight + 220)) + 'px'; b.style.transform = `translateX(${Math.sin(t*3 + i)*40}px) rotate(${t*360}deg)`; requestAnimationFrame(rise); }
+    requestAnimationFrame(rise);
+  }
+}
+
+/* countdown to Oct 25 (next occurrence) */
+function nextOct25(){ const now = new Date(); let t = new Date(now.getFullYear(),9,25,0,0,0); if(t - now <= 0) t = new Date(now.getFullYear()+1,9,25,0,0,0); return t; }
+let TARGET = nextOct25();
+function updateCountdown(){ const now=new Date(); let diff=Math.max(0,TARGET-now); const days=Math.floor(diff/(1000*60*60*24)); diff-=days*(1000*60*60*24); const hours=Math.floor(diff/(1000*60*60)); diff-=hours*(1000*60*60); const minutes=Math.floor(diff/(1000*60)); document.getElementById('days').textContent=String(days).padStart(2,'0'); document.getElementById('hours').textContent=String(hours).padStart(2,'0'); document.getElementById('minutes').textContent=String(minutes).padStart(2,'0'); if(TARGET - now <= 0){ document.getElementById('revealBtn').classList.remove('hidden'); document.getElementById('musicBtn').classList.remove('hidden'); } }
+updateCountdown(); setInterval(updateCountdown, 1000*30);
+
+/* keyboard shortcuts */
+document.addEventListener('keydown', e => {
+  if(e.key.toLowerCase()==='m'){ if(bgAudio.paused){ bgAudio.play().catch(()=>{}); musicBtn.textContent='Pause Music'; } else { bgAudio.pause(); musicBtn.textContent='Play Music'; } }
+  if(e.key.toLowerCase()==='s'){ revealBtn.click(); }
+});
+
+/* initialize labels */
+(function init(){ musicBtn.textContent = bgAudio.paused ? 'Play Music' : 'Pause Music'; })();
+</script>
+</body>
+</html>
